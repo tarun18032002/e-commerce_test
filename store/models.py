@@ -28,6 +28,13 @@ variations_category_choice =(
     ('size','size'),
 )
     
+class VariationManger(models.Manager):
+    def colors(self):
+        return super(VariationManger,self).filter(variation_category='color',is_active=True)
+    
+    def sizes(self):
+        return super(VariationManger,self).filter(variation_category='size',is_active=True)
+    
 class Variation(models.Model):
     product = models.ForeignKey(Products,on_delete=models.CASCADE)
     variation_category = models.CharField(max_length=100,choices=variations_category_choice)
@@ -35,5 +42,7 @@ class Variation(models.Model):
     is_active = models.BooleanField(default=True)
     created_date =  models.DateTimeField(auto_now=True)
 
+    objects = VariationManger()
+
     def __str__(self):
-        return self.product.product_name
+        return self.variation_value
